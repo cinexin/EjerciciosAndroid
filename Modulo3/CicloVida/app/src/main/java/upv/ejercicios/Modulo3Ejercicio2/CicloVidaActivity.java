@@ -32,4 +32,16 @@ public class CicloVidaActivity extends Activity {
         super.onResume();
         log(getResources().getString(R.string.on_resume_msg_log));
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        log(getResources().getString(R.string.on_stop_msg_log));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        log(getResources().getString(R.string.on_destroy_msg_log));
+    }
 }
