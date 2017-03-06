@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CicloVida</string>
+    <string name="on_create_msg_log">Se ha llamado al onCreate()</string>
+    <string name="on_resume_msg_log">Se ha llamado al onResume()</string>
+    <string name="on_pause_msg_log">Se ha llamado al onPause()</string>
+    <string name="on_stop_msg_log">Se ha llamado al onStop()</string>
+    <string name="on_destroy_msg_log">Se ha llamado al onDestroy()</string>
+</resources>
