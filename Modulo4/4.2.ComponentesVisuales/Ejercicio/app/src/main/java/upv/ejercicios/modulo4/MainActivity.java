@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             // Load the given URL on our WebView.
             view.loadUrl(url);
-            
+
             return true;
         }
 
