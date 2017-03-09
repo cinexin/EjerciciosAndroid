@@ -18,7 +18,7 @@
         <ImageButton
             android:id="@+id/bAdd"
             style="@style/dashboard_button"
-            android:src="@android:drawable/ic_menu_add" />
+            android:src="@drawable/ic_add_circle" />
         <ImageButton
             android:id="@+id/bDelete"
             style="@style/dashboard_button"
