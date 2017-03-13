@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName"
+            android:id="@+id/txt_name"/>
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,23 +34,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lbl_phone_field"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:inputType="phone"/>
+            android:textSize="20sp"
+            android:inputType="phone"
+            android:id="@+id/txt_phone"/>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="40px"/>
+            android:minHeight="40dp"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_save_state"
+            android:onClick="saveState"
             android:textAlignment="center"/>
 
         <Button

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Ejercicio1Prefs</string>
+    <string name="lbl_name_field">Nombre</string>
+    <string name="lbl_phone_field">Teléfono</string>
+    <string name="btn_save_state">Grabar estado</string>
+    <string name="btn_delete_state">Borrar estado</string>
+    <string name="btn_recover_state">Recuperar estado</string>
 </resources>
