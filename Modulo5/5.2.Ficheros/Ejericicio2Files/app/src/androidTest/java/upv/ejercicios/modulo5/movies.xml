@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<MovieList>
+    <Movie image="R.drawable.following" name="Following"  url ="http://www.imdb.com/title/tt0154506/" />
+    <Movie image="R.drawable.memento" name="Memento" url="http://www.imdb.com/title/tt0209144/" />
+    <Movie image="R.drawable.batman_begins" name="Batman Begins" url="http://www.imdb.com/title/tt0372784/" />
+    <Movie image="R.drawable.the_prestige" name="The Prestige" url="http://www.imdb.com/title/tt0482571/" />
+    <Movie image="R.drawable.the_dark_knight" name="The Dark Knight" url="http://www.imdb.com/title/tt0468569/" />
+    <Movie image="R.drawable.inception" name="Inception" url="http://www.imdb.com/title/tt1375666/"  />
+    <Movie image="R.drawable.the_dark_knight_rises" name="The Dark Knight Rises" url="http://www.imdb.com/title/tt1345836/" />
+</MovieList>

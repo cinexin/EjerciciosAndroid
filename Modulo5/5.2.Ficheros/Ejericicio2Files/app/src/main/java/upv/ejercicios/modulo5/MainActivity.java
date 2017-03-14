@@ -22,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
     private WebView webView;
     private ProgressDialog progressDialog;
 
+    private List<Item> populateMoviesDataFromXML() {
+        List<Item> movies = new ArrayList<>();
+
+        return movies;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
         this.listView = (ListView) findViewById(R.id.listView);
 
         List<Item> items = new ArrayList<Item>();
+        // Old - static data population about movies.....
+        /*
         items.add(new Item(R.drawable.following, "Following",
-                "http://www.imdb.com/title/tt0154506/"));
+
+                    "http://www.imdb.com/title/tt0154506/"));
         items.add(new Item(R.drawable.memento, "Memento",
                 "http://www.imdb.com/title/tt0209144/"));
         items.add(new Item(R.drawable.batman_begins, "Batman Begins",
@@ -47,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
                 "http://www.imdb.com/title/tt1375666/"));
         items.add(new Item(R.drawable.the_dark_knight_rises,
                 "The Dark Knight Rises", "http://www.imdb.com/title/tt1345836/"));
+        */
 
+        // New - dynamic data population reading from an XML...
+        items = populateMoviesDataFromXML();
         // Sets the data behind this ListView
         this.listView.setAdapter(new ItemAdapter(this, items));
 
