@@ -59,12 +59,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_delete_state"
+            android:onClick="clearState"
             android:textAlignment="center"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_recover_state"
+            android:onClick="recoverState"
             android:textAlignment="center"/>
 
     </LinearLayout>

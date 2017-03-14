@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recoverState(findViewById(R.layout.activity_main));
     }
 
     public void saveState(View view) {
@@ -36,4 +37,29 @@ public class MainActivity extends AppCompatActivity {
         _prefsEditor.commit();
     }
 
+    public void recoverState(View view) {
+        SharedPreferences _prefs = getSharedPreferences(SETTINGS_FILE_NAME, MODE_PRIVATE);
+
+        // Get prefs: name
+        String prefsName = _prefs.getString(SETTINGS_NAME_KEY,"No name");
+        // Get prefs: phone
+        String prefsPhone = _prefs.getString(SETTINGS_PHONE_KEY, "No phone");
+
+        ( (EditText) findViewById(R.id.txt_name)).setText(prefsName);
+        ((EditText) findViewById(R.id.txt_phone)).setText(prefsPhone);
+    }
+
+    public void clearState(View view) {
+        SharedPreferences _sharedPrefs = getSharedPreferences(SETTINGS_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor _sharedPrefsEditor = _sharedPrefs.edit();
+
+        _sharedPrefsEditor.clear();
+        _sharedPrefsEditor.commit();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveState( findViewById(R.layout.activity_main));
+    }
 }
