@@ -38,4 +38,9 @@ public class Item extends Object {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return this.getTitle() + this.getUrl() + Integer.toString(image);
+    }
 }
