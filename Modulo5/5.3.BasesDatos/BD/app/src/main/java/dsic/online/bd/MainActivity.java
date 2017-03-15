@@ -1,6 +1,7 @@
 package dsic.online.bd;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
     final static int STATE_NONE = 0;
     final static int STATE_NEW = 1;
     final static int STATE_EDIT = 2;
+
+    final static String DATABASE_NAME ="Personas.db";
+    final static String TABLE_NAME = "Persona";
+    final static String FIELD_NAME = "nombre";
+    final static String FIELD_EMAIL = "email";
+    final static String FIELD_PHONE = "telefono";
 
     SimpleAdapter adapter = null;
     List<HashMap<String, String>> contactList = null;
@@ -68,7 +76,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         contactList = new ArrayList<>();
+        // Get contact list from Database...
+        DBHelper dbHelper = new DBHelper(this.getApplicationContext(), DATABASE_NAME, null,1 );
 
+        Cursor personasCursor = dbHelper.getReadableDatabase().query(
+                TABLE_NAME,
+                new String[]{FIELD_NAME,FIELD_EMAIL, FIELD_PHONE},
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+
+        int nameFieldId = personasCursor.getColumnIndex(FIELD_NAME);
+        int emailFieldId = personasCursor.getColumnIndex(FIELD_EMAIL);
+        int phoneFieldId = personasCursor.getColumnIndex(FIELD_PHONE);
+
+        while (personasCursor.moveToNext()) {
+            Map<String, String> personaMap = new HashMap<>();
+            personaMap.put("name", personasCursor.getString(nameFieldId));
+            personaMap.put("email", personasCursor.getString(emailFieldId));
+            personaMap.put("phone", personasCursor.getString(phoneFieldId));
+
+            contactList.add((HashMap<String, String>) personaMap);
+        }
         adapter = new SimpleAdapter(
                 this,
                 contactList,
