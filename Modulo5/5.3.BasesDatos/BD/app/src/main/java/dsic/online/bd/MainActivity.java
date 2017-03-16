@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     DBHelper dbHelper = new DBHelper(this.getApplicationContext(),this.DATABASE_NAME, null,1 );
                     SQLiteDatabase db =  dbHelper.getWritableDatabase();
                     if (state == STATE_NEW) {
-                        // contactList.add(contact);
+                        contactList.add(contact);
                         // Creamos el registro (INSERT) en la base de datos
                         try {
                             db.beginTransaction();
@@ -187,18 +187,35 @@ public class MainActivity extends AppCompatActivity {
                             db.setTransactionSuccessful();
                         } catch (SQLiteException sqlEx) {
                             Log.e("[ERROR]: " , sqlEx.getMessage() );
-                            Log.e("[ERROR STACK TRACE]: ", sqlEx.getStackTrace().toString());
+                            sqlEx.printStackTrace();
                         } finally {
                             db.endTransaction();
                         }
 
                     } else if (state == STATE_EDIT) {
-                        // contactList.set(itemSelected, contact);
+                        contactList.set(itemSelected, contact);
                         // Actualizamos el registro (UPDATE) en la base de datos
+                        try {
+                            db.beginTransaction();
+                            String updateSQL = "UPDATE " + TABLE_NAME + " SET " +
+                                    FIELD_NAME + " = '" + contact.get("name") + "'," +
+                                    FIELD_EMAIL + " = '" + contact.get("email") + "'," +
+                                    FIELD_PHONE + " = '" + contact.get("phone") + "' " +
+                                    "WHERE " + FIELD_NAME + " = '" + contact.get("name") + "' ";
+                            Log.d("[DEBUG]", updateSQL);
+                            db.execSQL(updateSQL);
+                            db.setTransactionSuccessful();
+                        } catch (SQLiteException sqlEx) {
+                            Log.e("[ERROR]: ", sqlEx.getMessage());
+                            sqlEx.printStackTrace();
+                        } finally {
+                            db.endTransaction();
+                        }
 
                     }
-                    adapter.notifyDataSetChanged();
 
+                    adapter.notifyDataSetChanged();
+                    db.close();
                     clearEdition();
                     disableEdition();
                     state = STATE_NONE;
