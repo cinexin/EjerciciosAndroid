@@ -2,10 +2,13 @@ package dsic.online.bd;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -166,10 +169,33 @@ public class MainActivity extends AppCompatActivity {
                     contact.put("email", etEmail.getText().toString());
                     contact.put("phone", etPhone.getText().toString());
 
+                    DBHelper dbHelper = new DBHelper(this.getApplicationContext(),this.DATABASE_NAME, null,1 );
+                    SQLiteDatabase db =  dbHelper.getWritableDatabase();
                     if (state == STATE_NEW) {
-                        contactList.add(contact);
+                        // contactList.add(contact);
+                        // Creamos el registro (INSERT) en la base de datos
+                        try {
+                            db.beginTransaction();
+                            String insertSQL = "INSERT INTO " + TABLE_NAME + " (" +
+                                    FIELD_NAME + "," + FIELD_EMAIL + "," + FIELD_PHONE +
+                                    ") " + " VALUES (" +
+                                    "'" + contact.get("name") + "'" + "," +
+                                    "'" + contact.get("email") + "'" + "," +
+                                    "'" + contact.get("phone") + "'" + ")";
+                            Log.d("[DEBUG]", insertSQL);
+                            db.execSQL(insertSQL);
+                            db.setTransactionSuccessful();
+                        } catch (SQLiteException sqlEx) {
+                            Log.e("[ERROR]: " , sqlEx.getMessage() );
+                            Log.e("[ERROR STACK TRACE]: ", sqlEx.getStackTrace().toString());
+                        } finally {
+                            db.endTransaction();
+                        }
+
                     } else if (state == STATE_EDIT) {
-                        contactList.set(itemSelected, contact);
+                        // contactList.set(itemSelected, contact);
+                        // Actualizamos el registro (UPDATE) en la base de datos
+
                     }
                     adapter.notifyDataSetChanged();
 
