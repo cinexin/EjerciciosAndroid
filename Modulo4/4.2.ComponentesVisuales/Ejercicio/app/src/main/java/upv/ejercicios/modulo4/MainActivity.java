@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         socialNetworkItemList = this.populateSampleSocialNetworkList();
         this.ssNNGridView.setAdapter(new SocialNetworkItemAdapter(this, socialNetworkItemList));
 
-        ssNNGridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        ssNNGridView.setOnItemClickListener(new View.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 webOpenProgressDialog = ProgressDialog.show(MainActivity.this,"Progress Dialog", "Loading!");
