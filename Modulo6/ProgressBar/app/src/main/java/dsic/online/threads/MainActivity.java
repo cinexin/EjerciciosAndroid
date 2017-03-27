@@ -2,10 +2,13 @@ package dsic.online.threads;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +20,8 @@ public class MainActivity extends ActionBarActivity {
 
     Button bStart = null;
     Button bStop = null;
+
+    Integer progress;
 
     boolean cancelled = false;
 
@@ -35,31 +40,15 @@ public class MainActivity extends ActionBarActivity {
         bStop.setEnabled(false);
 
         updateProgress(0);
+
     }
 
     public void onClickButton(View view) {
         switch (view.getId()) {
             case R.id.bStart:
-                updateProgress(0);
 
-                bStart.setEnabled(false);
-                bStop.setEnabled(true);
+                new ProgressBarBackgroundTask().execute();
 
-                cancelled = false;
-                int progress = 0;
-                while ((progress < pb.getMax()) && (!cancelled)) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                    }
-                    progress++;
-                    updateProgress(progress);
-                }
-
-                Toast.makeText(this, R.string.max_count, Toast.LENGTH_SHORT).show();
-
-                bStart.setEnabled(true);
-                bStop.setEnabled(false);
 
                 break;
             case R.id.bStop:
@@ -71,20 +60,58 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateProgress(int progress) {
-        pb.setProgress(progress);
-        tv.setText(progress + getResources().getString(R.string.out_of_100));
+
     }
 
-    private class ProgressBarBackgroundTask extends AsyncTask<Void, Void, Void> {
+    private class ProgressBarBackgroundTask extends AsyncTask<Void, Integer, Boolean> {
+
 
         @Override
-        protected Void doInBackground(Void... params) {
-            return null;
+        protected Boolean doInBackground(Void... params) {
+            updateProgress(0);
+
+
+
+            cancelled = false;
+            int progress = 0;
+            while ((progress < 100) && (!cancelled)) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                }
+                progress++;
+                publishProgress(progress);
+            }
+            if (cancelled)
+                return Boolean.FALSE;
+            else
+                return Boolean.TRUE;
         }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
+        protected void onPreExecute() {
+            bStart.setEnabled(false);
+            bStop.setEnabled(true);
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean finished) {
+            if (finished) {
+                Toast.makeText(MainActivity.this, R.string.max_count, Toast.LENGTH_SHORT).show();
+                bStart.setEnabled(true);
+                bStop.setEnabled(false);
+            }
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int progress = values[0].intValue();
+            Log.d("[DEBUG]", values[0].toString());
+            pb.setProgress(progress);
+            tv.setText(progress + getResources().getString(R.string.out_of_100));
+            // updateProgress(values[0].intValue());
         }
     }
 }
