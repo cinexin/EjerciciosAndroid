@@ -59,6 +59,12 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        cancelled = true;
+        super.onPause();
+    }
+
     private void updateProgress(int progress) {
 
     }
