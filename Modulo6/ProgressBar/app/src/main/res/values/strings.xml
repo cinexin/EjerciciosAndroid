@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProgressBarAsyncTask</string>
+    <string name="out_of_100">/100</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="max_count">Max count reached!</string>
+
+</resources>
