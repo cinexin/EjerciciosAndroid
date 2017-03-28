@@ -13,11 +13,21 @@
         <activity
             android:name=".JSON_HTTP_Activity"
             android:label="@string/app_name">
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> -->
+        </activity>
+
+        <activity android:name=".HTML_HTTP_Activity"
+            android:label="Ejemplo HTTP - HTML">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

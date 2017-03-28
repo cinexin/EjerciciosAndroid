@@ -20,7 +20,7 @@ import dsic.online.communication.classes.WeatherHttpClient;
 import dsic.online.communication.classes.WeatherInformation;
 import dsic.online.communication.classes.WeatherInformationParaGSON;
 
-public class JSON_HTTP_Activity extends AppCompatActivity {
+    public class JSON_HTTP_Activity extends AppCompatActivity {
 
 
     private TextView cityText;
