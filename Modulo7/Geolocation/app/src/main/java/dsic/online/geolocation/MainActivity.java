@@ -1,12 +1,22 @@
 package dsic.online.geolocation;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     EditText etLongitude = null;
     EditText etLatitude = null;
     TextView tvAddress = null;
+    LocationManager locationManager = null;
+    MyLocationListener myLocationListener = null;
+    String locationProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +43,18 @@ public class MainActivity extends AppCompatActivity {
 
         state = DONT_LOCATE;
 
-        // TODO: Get references to the LocationManager and our own defined LocationListener
+
+        // DONE: Get references to the LocationManager and our own defined LocationListener
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            locationProvider = LocationManager.GPS_PROVIDER;
+        else {
+            locationProvider = LocationManager.NETWORK_PROVIDER;
+        }
+
+        myLocationListener = new MyLocationListener();
+
 
     }
 
@@ -60,22 +84,93 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_locate:
                 state = LOCATE;
 
-                // TODO: Request location updates from the LocationManager
-
+                // DONE: Request location updates from the LocationManager
+                try {
+                    locationManager.requestLocationUpdates(locationProvider, 0, 0, myLocationListener);
+                } catch (SecurityException securityEx) {
+                    Log.e("[ERROR]", "Couldn't get location updates. Check your GPS/Network provider: " +
+                            securityEx.getMessage());
+                    return false;
+                }
                 break;
             case R.id.action_dont_locate:
                 state = DONT_LOCATE;
-
-                // TODO: Stop receiving location updates
-
+                // DONE: Stop receiving location updates
+                locationManager.removeUpdates(myLocationListener);
                 break;
         }
         supportInvalidateOptionsMenu();
         return true;
     }
 
-    // TODO: Create a new private class implementing LocationListener
+    // DONE: Create a new private class implementing LocationListener
+    private class MyLocationListener implements LocationListener {
 
-    // TODO: Create an AsyncTask to translate latitude and longitude into a human readable address using Geocoder
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.w("[WARNING]","GPS Status changed. Provider: " + provider + " status " + status);
+        }
 
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.i("[INFO]", "Provider enabled: " + provider);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.w("[WARNING]","Provider disabled: " + provider);
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            etLongitude.setText(String.valueOf(location.getLongitude()));
+            etLatitude.setText(String.valueOf(location.getLatitude()));
+            Log.d("[DEBUG]", location.toString());
+            new LocationTranslationTask().execute(location);
+        }
+    }
+
+    // DONE: Create an AsyncTask to translate latitude and longitude into a human readable address using Geocoder
+    private class LocationTranslationTask extends AsyncTask<Location, Void, List<Address>> {
+
+        @Override
+        protected List<Address> doInBackground(Location... params) {
+            Location location = params[0];
+
+            Log.d("[DEBUG]", "Translating location from: " + location.toString());
+            Geocoder geocoder = new Geocoder(getApplicationContext());
+            try {
+                Log.d("[DEBUG]", "Longitude: " + Double.valueOf(location.getLongitude()).doubleValue());
+                Log.d("[DEBUG]", "Latitude: " + Double.valueOf(location.getLatitude()).doubleValue());
+                List<Address> addresses = geocoder.getFromLocation(Double.valueOf(location.getLatitude()).doubleValue(),
+                        Double.valueOf(location.getLongitude()).doubleValue(),
+                         5);
+                Log.d("[DEBUG]", "Addresses size: " + String.valueOf(addresses.size()));
+                for (Address address: addresses) {
+                    Log.d("[DEBUG]", address.toString());
+                }
+
+                return addresses;
+            } catch (IOException ioEx) {
+                Log.e("[ERROR]", "Error while trying to translate location. Cause: " + ioEx.getMessage());
+                return null;
+            } catch (IllegalArgumentException argEx) {
+                Log.e("[ERROR]", "Error while trying to translate location. Cause: " + argEx.getMessage());
+                Log.d("[DEBUG]", "Longitude: " + location.getLongitude());
+                Log.d("[DEBUG]", "Latitude: " + location.getLatitude());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Address> addresses) {
+            super.onPostExecute(addresses);
+            if (addresses != null) {
+                for (Address address: addresses) {
+                    Log.d("[DEBUG]", address.toString());
+                    tvAddress.setText(address.getLocality() + "," + address.getCountryName());
+                }
+            }
+        }
+    }
 }
