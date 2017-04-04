@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
 
             case R.id.acction_add_marker:
-                // TODO: add marker to the map...
+                // DONE: add marker to the map...
 
                 if (etLatitude.getText() != null && etLongitude.getText() != null) {
                     MarkerOptions markerOptions =  new MarkerOptions();
@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     markerOptions.snippet(etLongitude.getText().toString() + " , " + etLatitude.getText().toString());
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     this.googleMap.addMarker(markerOptions);
+                    this.googleMap.setInfoWindowAdapter(new LocationInfoAdapter(getLayoutInflater()));
 
                 } else {
                     Toast.makeText(this, "No location to mark", Toast.LENGTH_SHORT).show();
@@ -212,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return addresses;
             } catch (IOException ioEx) {
                 Log.e("[ERROR]", "Error while trying to translate location. Cause: " + ioEx.getMessage());
+                ioEx.printStackTrace();
                 return null;
             } catch (IllegalArgumentException argEx) {
                 Log.e("[ERROR]", "Error while trying to translate location. Cause: " + argEx.getMessage());
