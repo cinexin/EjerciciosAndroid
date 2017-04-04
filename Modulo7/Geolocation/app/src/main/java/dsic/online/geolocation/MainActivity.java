@@ -7,18 +7,32 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     final int DONT_LOCATE = 0;
     final int LOCATE = 1;
@@ -31,11 +45,29 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager = null;
     MyLocationListener myLocationListener = null;
     String locationProvider;
+    GoogleMap googleMap;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // DONE: Get and display The MapView
+        /* View view = findViewById(R.id.myMap);
+        MapsInitializer.initialize(getApplicationContext());
+        ((MapView) findViewById(R.id.myMap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            }
+        }); */
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.myMap);
+        mapFragment.getMapAsync(this);
 
         etLongitude = (EditText) findViewById(R.id.etLongitude);
         etLatitude = (EditText) findViewById(R.id.etLatitude);
@@ -79,6 +111,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(39.472864, -0.401238)));
+        googleMap.moveCamera(CameraUpdateFactory.zoomIn());
+        this.googleMap = googleMap;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_locate:
@@ -97,6 +137,25 @@ public class MainActivity extends AppCompatActivity {
                 state = DONT_LOCATE;
                 // DONE: Stop receiving location updates
                 locationManager.removeUpdates(myLocationListener);
+                break;
+
+            case R.id.acction_add_marker:
+                // TODO: add marker to the map...
+
+                if (etLatitude.getText() != null && etLongitude.getText() != null) {
+                    MarkerOptions markerOptions =  new MarkerOptions();
+                    LatLng locationLatLng = new LatLng(Double.valueOf(etLatitude.getText().toString()), Double.valueOf(etLongitude.getText().toString())) ;
+                    markerOptions.position(locationLatLng);
+                    Log.d("[DEBUG]", locationLatLng.toString());
+                    markerOptions.title("Marker");
+                    markerOptions.snippet("Snippet");
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    this.googleMap.addMarker(markerOptions);
+
+                } else {
+                    Toast.makeText(this, "No location to mark", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 break;
         }
         supportInvalidateOptionsMenu();

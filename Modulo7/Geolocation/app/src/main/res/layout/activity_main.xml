@@ -34,4 +34,16 @@
         android:text="@string/unknown_address"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <!--<com.google.android.gms.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/myMap">
+
+    </com.google.android.gms.maps.MapView> -->
+    <fragment
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/myMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </LinearLayout>

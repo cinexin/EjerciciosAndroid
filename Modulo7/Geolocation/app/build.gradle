@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "dsic.online.geolocation"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.google.android.gms:play-services-maps:10.2.1'
 }
