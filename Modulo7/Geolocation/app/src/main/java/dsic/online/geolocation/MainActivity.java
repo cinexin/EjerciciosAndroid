@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     markerOptions.position(locationLatLng);
                     Log.d("[DEBUG]", locationLatLng.toString());
                     markerOptions.title("Marker");
-                    markerOptions.snippet("Snippet");
+                    markerOptions.snippet(etLongitude.getText().toString() + " , " + etLatitude.getText().toString());
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     this.googleMap.addMarker(markerOptions);
 
